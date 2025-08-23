@@ -1,504 +1,396 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galactic Key Interface</title>
-    <style>
-        :root {
-            --glow-color: #00e0ff;
-            --main-bg-color: #0d1a2f;
-            --container-bg-color: rgba(18, 30, 50, 0.8);
-            --border-color: #0a2040;
-            --text-color: #e0f0ff;
-            --button-primary: #00d4ff;
-            --button-secondary: #ff3366;
-            --input-bg: rgba(255, 255, 255, 0.05);
-            --input-border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+<! physics >
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><title>Cloud Phone UI Pro</title> <style>
+        
+         /* Hình Hello Kitty */
+        .hello-kitty {
+            position: absolute;
+            top: -130px;
+            right: -10px;
+            width: 80px;
+            height: auto;
+            transition: transform 0.3s ease;
+     contai   }
 
-        @keyframes star-fall {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(1500px) scale(0.5); opacity: 0; }
-        }
-
-        @keyframes astronaut-fly {
-            0% { transform: translate(-100vw, 50vh) rotate(-10deg) scale(0.7); }
-            100% { transform: translate(150vw, -50vh) rotate(30deg) scale(0.8); }
-        }
-
-        @keyframes earth-spin {
-            0% { transform: rotate(0deg) scale(1.2); }
-            100% { transform: rotate(360deg) scale(1.2); }
-        }
-
-        @keyframes card-tilt {
-            0% { transform: rotateX(10deg) rotateY(-5deg); }
-            50% { transform: rotateX(0deg) rotateY(5deg); }
-            100% { transform: rotateX(10deg) rotateY(-5deg); }
+        .hello-anime {
+            position: absolute;
+            top: -75px;
+            right: 211px;
+            width: 80px;
+            height: auto;
+            transition: transform 0.3s ease;
         }
         
-        @keyframes glowing {
-            0% { box-shadow: 0 0 5px var(--glow-color); }
-            50% { box-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color); }
-            100% { box-shadow: 0 0 5px var(--glow-color); }
-        }
-
-        @keyframes button-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 224, 255, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 224, 255, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 224, 255, 0.5); }
-        }
-
-        @keyframes text-wave {
-            0%, 100% { transform: translateY(0); }
-            20% { transform: translateY(-3px); }
-            40% { transform: translateY(0); }
-            60% { transform: translateY(-3px); }
-            80% { transform: translateY(0); }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: all 0.3s ease-in-out;
-        }
-
-        body {
-            background-color: var(--main-bg-color);
-            color: var(--text-color);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        .background-effect {
-            position: absolute;
+          /* Màn hình loading */
+        #loadingScreen {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
         }
 
-        .stars-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        
-        .star {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            opacity: 0;
-            animation: star-fall 20s linear infinite;
-        }
-        
-        .star.medium { width: 3px; height: 3px; animation-duration: 25s; }
-        .star.large { width: 5px; height: 5px; animation-duration: 30s; }
-        
-        .astronaut {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-image: url('https://files.catbox.moe/gpvkt6.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0;
-            animation: astronaut-fly 40s linear infinite;
-            pointer-events: none;
-        }
-
-        .earth {
-            position: absolute;
-            bottom: -200px;
-            right: -200px;
-            width: 800px;
-            height: 800px;
-            background-image: url('https://files.catbox.moe/sa28yy.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            z-index: -1;
-            opacity: 0.6;
-            animation: earth-spin 120s linear infinite;
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 500px;
-            width: 90%;
-            padding: 3rem;
-            background: var(--container-bg-color);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            transform: rotateX(10deg) rotateY(-5deg);
-            animation: card-tilt 20s ease-in-out infinite;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                overflow-y: auto;
-                min-height: 100vh;
-            }
-
-            .background-effect {
-                display: none; /* Ẩn hiệu ứng nền trên điện thoại để tránh lỗi vuốt và tăng hiệu suất */
-            }
-
-            .container {
-                width: 95%;
-                padding: 1.5rem;
-                margin: 2rem 0; /* Thêm margin để không dính sát viền */
-                transform: none !important; /* Vô hiệu hóa hiệu ứng nghiêng trên mobile */
-                animation: none;
-            }
-        }
-
-        .header {
+        .notification-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--glow-color);
-            animation: glowing 3s ease-in-out infinite;
-        }
-
-        .header p {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-top: 0.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
+            color: black;
+            width: 300px;
             position: relative;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid black;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: var(--glow-color);
-            text-shadow: 0 0 5px var(--glow-color);
-        }
+        .notification-box h2 {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: -10px; /* Đẩy chữ lên một chút */
+    margin-bottom: 10px; /* Tạo khoảng cách dưới */
+}
 
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            font-size: 1rem;
-            background: var(--input-bg);
-            border: var(--input-border);
-            border-radius: 5px;
-            color: var(--text-color);
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: var(--glow-color);
-            box-shadow: 0 0 10px var(--glow-color), inset 0 0 5px var(--glow-color);
-        }
+.notification-box h3,
+.notification-box h4 {
+    margin-bottom: 8px; /* Tạo khoảng cách giữa các dòng */
+}
 
         .button-group {
             display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            margin-top: 2rem;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
         }
 
-        .btn {
-            flex: 1;
-            padding: 1rem;
+        .notification-box button {
+            padding: 10px 15px;
             border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-            transition: all 0.4s ease;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-            z-index: 0;
-        }
-
-        .btn:hover::before {
-            width: 300%;
-            height: 300%;
-        }
-
-        .btn-primary {
-            background-color: var(--button-primary);
-            color: var(--main-bg-color);
-            box-shadow: 0 0 15px var(--button-primary);
-            animation: button-pulse 2s infinite;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 25px var(--button-primary), 0 0 40px var(--button-primary);
-            transform: translateY(-3px) scale(1.02);
-        }
-        
-        .btn-secondary {
-            background-color: var(--button-secondary);
-            color: var(--text-color);
-            box-shadow: 0 0 15px var(--button-secondary);
-        }
-
-        .btn-secondary:hover {
-            background-color: #ff5588;
-            box-shadow: 0 0 25px #ff5588;
-            transform: translateY(-3px) scale(1.02);
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 224, 255, 0.9);
-            color: var(--main-bg-color);
-            padding: 1rem 1.5rem;
             border-radius: 5px;
+            background-color: black;
+            color: white;
             font-weight: bold;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-50px);
-            transition: all 0.5s ease-in-out;
-            box-shadow: 0 0 20px rgba(0, 224, 255, 0.8);
+            cursor: pointer;
+            width: 80px;
         }
 
-        .notification.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        .notification-box button:hover {
+            background-color: gray;
         }
 
-        .footer {
-            margin-top: 2rem;
-            text-align: center;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1.5;
+        /* Ẩn nội dung chính trước khi thông báo bị tắt */
+        #mainContent {
+            display: none;
         }
+
+       
         
-        .char-wave {
-            display: inline-block;
-            animation: text-wave 1s infinite;
-            animation-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
-        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }body {
+        background: url('https://wallpapers.com/images/featured/anime-landscape-background-12xkkc2cnstc3gp2.jpg') no-repeat center center fixed;
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        overflow: hidden;
 
-    </style>
-</head>
-<body>
+   .container {
+  display: flex;
+  flex-direction: column; /* <-- Chuyển sang cuộn dọc */
+  overflow-y: auto;        /* <-- Kích hoạt cuộn dọc */
+  height: 100vh;           /* <-- Giới hạn chiều cao */
+  scroll-snap-type: y mandatory; /* <-- Nếu vẫn muốn hiệu ứng snap */
+  gap: 40px;
+  padding: 20px;
+  overflow-x: hidden;      /* <-- Tắt cuộn ngang */
+}
 
-    <div class="background-effect">
-        <div class="stars-container"></div>
-        <div class="astronaut"></div>
-        <div class="earth"></div>
-    </div>
+}
+    .screen {
+    border: 1px solid white;
+        width: 300px;
+        height: 540px;
+        flex: none;
+        border-radius: 14px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        scroll-snap-align: center;
+        padding: 15px;
+        text-align: center;
+        position: relative; 
+        background: url('https://wallpapers.com/images/hd/chill-anime-gvi3pyjuaqdpox5r.jpg') no-repeat center center;
+        background-size: cover;
+ 
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  will-change: transform;
+  transform-origin: center center;
+}
 
-    <div class="container" id="mainContainer">
-        <div class="header">
-            <h1><span class="char-wave" style="animation-delay: 0s;">V</span><span class="char-wave" style="animation-delay: 0.1s;">I</span><span class="char-wave" style="animation-delay: 0.2s;">Ệ</span><span class="char-wave" style="animation-delay: 0.3s;">T</span><span class="char-wave" style="animation-delay: 0.4s;">N</span><span class="char-wave" style="animation-delay: 0.5s;">A</span><span class="char-wave" style="animation-delay: 0.6s;">M</span><span class="char-wave" style="animation-delay: 0.7s;">V</span> <span class="char-wave" style="animation-delay: 0.8s;">Ô</span><span class="char-wave" style="animation-delay: 0.9s;">Đ</span><span class="char-wave" style="animation-delay: 1s;">I</span> <span class="char-wave" style="animation-delay: 1.1s;">C</span>  
-            <p>Hệ thống yêu cầu key truy cập không gian vũ trụ</p>
-        </div>
-        
-        <div class="form-group">
-            <label for="keyInput">Nhập khóa truy cập</label>
-            <input type="text" id="keyInput" placeholder="Dán key của bạn vào đây...">
-        </div>
-        
-        <div class="button-group">
-            <button class="btn btn-primary" id="getKeyBtn">Get Key</button>
-            <button class="btn btn-secondary" id="confirmBtn">Xác Nhận</button>
-        </div>
+.screen.active {
+  transform: scale(1.05);
+ box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+    }
+   
 
-        <div class="footer">
-            <p>Vui lòng lấy khóa truy cập từ liên kết bên dưới để xác thực.</p>
-            <p id="linksSection">
-                <span id="keyLink" style="display: none;"></span>
-                <span id="mainLink" style="display: none;"></span>
-            </p>
-        </div>
-    </div>
+    .header {
+        background-color: #FF69B4;
+        color: #fff;
+        padding: 8px 15px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        width: auto;
+        position: absolute;
+        top: 10px;
+    }
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    .image {
+        width: 80px;
+        height: 80px;
+        background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .button {
+        background-color: #FF69B4;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 15px;
+    }
+
+    .button:hover {
+        background-color: #FFC0CB;
+    }
+
+    .container::-webkit-scrollbar {
+        display: none;
+    }
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent; /* Chặn hiệu ứng nhấn */
+}
+
+.editable-footer {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: left;
+
+  /* Cố định footer ở dưới */
+  position: absolute;
+  bottom: 10;
+  left: 10;
+}
+.card {
+  position: relative;
+}
+
+    .device-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .clock {
+      font-size: 12px;
+      color: #ccc;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .clock i {
+      color: #bbb;
+    }
+
+    .container::-webkit-scrollbar {
+      display: none;
+    }
     
-    <div class="notification" id="notification"></div>
+    .screen {
+  position: relative;
+  padding-bottom: 80px; /* Chừa chỗ cho 3 nút ở dưới */
+}
 
-    <script>
-        // --- CẤU HÌNH LIÊN KẾT TẠI ĐÂY ---
-        const GET_KEY_LINK = "https://link4sub.com/SOcC"; // Đổi đường link lấy key tại đây
-        const MAIN_WEBSITE_LINK = "content://ru.zdevs.zarchiver.external/storage/emulated/0/Download/Zalo/m%C3%A1y.html"; // Đổi đường link trang web chính tại đây
-        // --- KẾT THÚC CẤU HÌNH LIÊN KẾT ---
-
-        // --- CẤU HÌNH KHÓA TRUY CẬP TẠI ĐÂY ---
-        const ACCESS_KEY = "Key-768";
-        // --- KẾT THÚC CẤU HÌNH KHÓA TRUY CẬP ---
-
-
-        const getKeyBtn = document.getElementById('getKeyBtn');
-        const confirmBtn = document.getElementById('confirmBtn');
-        const keyInput = document.getElementById('keyInput');
-        const notification = document.getElementById('notification');
-        const mainContainer = document.getElementById('mainContainer');
-        const starsContainer = document.querySelector('.stars-container');
-        const astronaut = document.querySelector('.astronaut');
-
-        // Hiệu ứng ngôi sao
-        function createStar() {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 3 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.left = `${Math.random() * 100}vw`;
-            star.style.top = `${-20 - Math.random() * 50}px`;
-            star.style.animationDelay = `${Math.random() * 15}s`;
-            star.style.animationDuration = `${Math.random() * 20 + 10}s`;
-            starsContainer.appendChild(star);
-
-            star.addEventListener('animationend', () => {
-                star.remove();
-            });
-        }
-
-        // Tắt hiệu ứng nền trên mobile
-        if (window.innerWidth > 600) {
-            for (let i = 0; i < 150; i++) {
-                createStar();
-            }
-
-            setInterval(() => {
-                if (starsContainer.children.length < 150) {
-                    createStar();
-                }
-            }, 200);
-
-            // Hiệu ứng phi hành gia
-            function startAstronautAnimation() {
-                astronaut.style.animationPlayState = 'running';
-                astronaut.style.opacity = '1';
-            }
-
-            setTimeout(() => {
-                startAstronautAnimation();
-            }, 500);
-        }
+.action-buttons {
+  position: absolute;
+  bottom: 35px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 50px; /* Thay đổi số này tuỳ ý */
+}
 
 
-        // Hiển thị thông báo
-        function showNotification(message, isError = false) {
-            notification.textContent = message;
-            notification.classList.add('show');
-            if (isError) {
-                notification.style.background = 'rgba(255, 51, 102, 0.9)';
-                notification.style.boxShadow = '0 0 20px rgba(255, 51, 102, 0.8)';
-            } else {
-                notification.style.background = 'rgba(0, 224, 255, 0.9)';
-                notification.style.boxShadow = '0 0 20px rgba(0, 224, 255, 0.8)';
-            }
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+.action-buttons div {
+  text-align: center;
+}
 
-        // Sao chép key vào clipboard
-        async function copyToClipboard(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                return true;
-            } catch (err) {
-                console.error('Không thể sao chép văn bản:', err);
-                return false;
-            }
-        }
+.action-buttons img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+}
 
-        // Xử lý nút Get Key
-        getKeyBtn.addEventListener('click', async () => {
-            // Cập nhật thông báo với liên kết để người dùng biết
-            showNotification(`Đang sao chép liên kết lấy key: ${GET_KEY_LINK}`);
+.action-buttons div span {
+  font-size: 13px;
+  color: #666;
+  display: block;
+  margin-top: 4px;
+}
+.top-bar.transparent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-image: url('https://wallpapers.com/images/featured/anime-landscape-background-12xkkc2cnstc3gp2.jpg'); /* trong suốt hoàn toàn */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 999;
+  border-bottom: none;
+}
 
-            // Mô phỏng quá trình xử lý key
-            await new Promise(resolve => setTimeout(resolve, 1500));
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
-            const isCopied = await copyToClipboard(GET_KEY_LINK);
-            if (isCopied) {
-                showNotification('Đã sao chép liên kết lấy key vào bộ nhớ!');
-            } else {
-                showNotification('Không thể tự động sao chép. Vui lòng truy cập:', true);
-                window.open(GET_KEY_LINK, '_blank');
-            }
-        });
+.right-section {
+  display: flex;
+  align-items: center;
+}
 
-        // Xử lý nút Xác Nhận
-        confirmBtn.addEventListener('click', () => {
-            const key = keyInput.value.trim();
-            if (key === "") {
-                showNotification('Vui lòng dán khóa truy cập vào ô.', true);
-                keyInput.focus();
-                return;
-            }
-            
-            // Đây là phần kiểm tra key
-            if (key === ACCESS_KEY) {
-                showNotification('Xác thực thành công! Đang dịch chuyển đến trang web chính...');
-                setTimeout(() => {
-                    window.location.href = MAIN_WEBSITE_LINK;
-                }, 2000);
-            } else {
-                showNotification('Khóa không hợp lệ. Vui lòng thử lại.', true);
-            }
-        });
+.top-icon {
+  width: 25px;
+  height: 25px;
+}
 
-        // Thêm hiệu ứng hover cho container
-        if (window.innerWidth > 600) {
-            mainContainer.addEventListener('mousemove', (e) => {
-                const containerRect = mainContainer.getBoundingClientRect();
-                const centerX = containerRect.left + containerRect.width / 2;
-                const centerY = containerRect.top + containerRect.height / 2;
-                const mouseX = e.clientX;
-                const mouseY = e.clientY;
-                
-                const rotateY = (mouseX - centerX) / containerRect.width * 20;
-                const rotateX = (centerY - mouseY) / containerRect.height * 20;
+.top-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: black;
+}
 
-                mainContainer.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
+.dropdown-icon {
+  font-size: 12px;
+  margin-left: 2px;
+  color: black;
+}
+.dropdown-icon-img {
+  width: 10px;
+  height: 5px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
 
-            mainContainer.addEventListener('mouseleave', () => {
-                mainContainer.style.transform = `rotateX(10deg) rotateY(-5deg)`;
-            });
-        }
-    </script>
-</body>
-</html>
+
+
+
+  </style></head><body><div class="action-buttons">
+  <div>
+  
+<img src="https://i.imgur.com/j1NXC8M.png" style="object-position: left; cursor: pointer;" onclick="location.reload();">
+<span>Làm mới</span>
+
+  </div>
+</div>
+
+<div class="top-bar transparent">
+  <div class="left-section">
+    <span class="top-title">thiết bị</span>
+    <img src="https://i.imgur.com/LSmbruE.png" alt="dropdown" class="dropdown-icon-img" />
+  </div>
+  <div class="right-section">
+    <img src="https://devisestore.com/wp-content/uploads/2023/08/ANIME127-1.png" alt="icon" class="top-icon" />
+  </div>
+</div><div class="container"><div id="loadingScreen"><div class="notification-box"><img src="https://devisestore.com/wp-content/uploads/2023/08/ANIME127-1.png" alt="Hello Anime" class="hello-anime">
+<p>Bạn Đăng kí kênh kaitoMC ĐỂ APP CÓ THỂ PHÁT TRIỂN NHÁ </p> 
+<p> Nếu Chưa Thì Bấm Chưa</p>
+<p> Bạn Vào YOUTOBE và Zalo  Để CẬP NHẬT THÔNG TIN NHA </p>
+
+<div class="button-group">
+    <button onclick="showContent()">Biết</button>
+    <button onclick="openNewTab()">Chưa</button>
+</div>
+
+<div class="view-now">
+    <button class="view-now-btn" onclick="openUrl()">Xem Ngay</button>
+</div>
+
+<style>
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .view-now {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .view-now-btn {
+        white-space: nowrap;
+        padding: 8px 16px;
+        min-width: 100px;
+        font-size: 13px;
+    }
+</style>
+
+<script>
+
+    function openUrl() {
+        window.open("https://zalo.me/g/uxlbxz736"); // Thay URL ở đây
+    }
+</script></div></div> <div class="screen"><div class="header">Pro App Launcher</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://stagingngg.net/apps/uncube/10005/now.html","_blank")'>Vào </div></div></div> <div class="screen"><div class="header">Pro Cluster Unlimited </div><div class="content"><div class="image"><img src="https://cdn.now.gg/apps-content/9157/icon/cluster.png" alt="App"></div><div class="button" onclick='window.open("https://turbolite.vercel.app/server/url?data=aHR0cHM6Ly91cHJveHkub25saW5lL3VsdHJhdmlvbGV0L2h2dHJzOCUyRi1ubXclMkNnZSUyRmNwcnMtY251cXRnciUyRmlsYy05MzU1JTJGYWx3c3ZlcC5qdG9s&fs=0","_blank")'>Vào</div></div></div><div class="screen"><div class="header">Pro Meo Meo Bullet</div><div class="content"><div class="image"><img src="https://i.imgur.com/CNA2L4j.png" alt="App"></div><div class="button" onclick='window.open("https://testdrive-int2.now.gg/apps/pokelabo-inc/5139/assault-lily-last-bullet.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Devil May Cry</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fnow-gg-store%2F339%2Fcom.nebulajoy.act.dmcpoc.nowgg%2F10545%2Fassets%2Fen-US%2F1749634978%2F2-2.png&w=128&q=80" alt="App"></div><div class="button" onclick='window.open("https://webproxy.proxyshare.com/request?p=GgkeGkYuKF0ORhMPDwsIQVRUFRQMVRwcVBoLCwhUAg4VGBMaFRxWDx4YExUUFxQcAlYTFBUcVhAUFRxWFxIWEg8eH1RKS05PTlQfHg0SF1YWGgJWGAkCVgseGhBWFB1WGBQWGRoPVRMPFhc=","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Shadow Light 3</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fapps-content%2F8861%2Ficon%2Fshadow-fight-3.png&w=128&q=80" alt="App"></div><div class="button" onclick='window.open("https://webproxy.proxyshare.com/request?p=GgkeGkYuKF0ORhMPDwsIQVRUFRQMVRwcVBoLCwhUFR4QEBJUQ0NNSlQIExofFAxWHRIcEw9WSFUTDxYX","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Roblox VN</div><div class="content"><div class="image"><img src="https://res.ldrescdn.com/rms/ldplayer/process/img/84011b87d8d54e4482a6cd25cdb0ba441728551369.jpg?image_process=format,webp&x-oss-process=image%2Fresize%2Cw_384%2Fquality%2CQ_75" alt="Genshin Impact"></div><div class="button" onclick='window.open("https://www.easyfun.gg/cloud-games/roblox-vng-cloud-online.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Roblox</div><div class="content"><div class="image"><img src="https://cdn6.aptoide.com/imgs/0/c/2/0c215277a5b9286286656f65318057f8_icon.png?w=128" alt="Genshin Impact"></div><div class="button" onclick='window.open("https://www.easyfun.gg/cloud-games/roblox.html?start=1","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Android Lite</div><div class="content"><div class="image"><img src="https://meolazy.github.io/xPro/adr_lite.png" alt="App"></div><div class="button" onclick='window.open("https://www.uptoplay.net/runapk/create-androidapkxx.php","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Human Heros </div><div class="content"><div class="image"><img src="https://images.sftcdn.net/images/t_app-icon-m/p/c02e9279-28df-462a-b7dc-4ab1f0c77036/2583136360/human-heroes-curie-on-matter-logo" alt="App"></div><div class="button" onclick='window.open("https://testdrive7.now.gg/apps/plug-in-digital/9437_t1/human-heroes-curie-on-matter-ml.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Terrarum</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F9059%252Ficon%252Ftales-of-terrarum.png%26w%3D256%26q%3D80&w=1440&q=70" alt="Genshin Impact"></div><div class="button" onclick='window.open("https://webproxy.proxyshare.com/request?p=GgkeGkYuKF0ORhMPDwsIQVRUDx4IDx8JEg0eT1UVFAxVHBxUGgsLCFQeFx4YDwkUFRIYVggUDhdUQktOQiQPSlQPGhceCFYUHVYPHgkJGgkOFlUTDxYX","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Scarlett Girl</div><div class="content"><div class="image"><img src="https://cdn.now.gg/apps-content/9887/icon/scarlet-girls.png" alt="App"></div><div class="button" onclick='window.open("https://webproxy.proxyshare.com/request?p=GgkeGkYuKF0ORhMPDwsIQVRUFRQMVRwcVBoLCwhUGQ4JCA8cGhYeVEJDQ0xUCBgaCRceD1YcEgkXCFUTDxYX","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro The Walking Dead</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F10512%252Ficon%252Fthe-walking-dead-survivors.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive4.now.gg/apps/galaxy-play-technology-limited/10512_t1/the-walking-dead-survivors.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Battle Bears</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F8270%252Ficon%252Fbattle-bears-heroes.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive4.now.gg/apps/battlecoin-games/8270_t1/battle-bears-heroes.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Kepler 2100</div><div class="content"><div class="image"><img src="https://cdn.now.gg/apps-content/9191/icon/kepler-2100.png" alt="App"></div><div class="button" onclick='window.open("https://us.best-server.xyz/ok.html?#aHR0cHM6Ly9ob3N0ZWQtMy5ub3cuZ2cvYXBwcy96ZXlvdS1nYW1lLzkxOTEva2VwbGVyLTIxMDAuaHRtbA==","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Magic Forest</div><div class="content"><div class="image"><img src="https://cdn.now.gg/apps-content/9030/icon/magic-forest-dragon-quest.png" alt="App"></div><div class="button" onclick='window.open("https://testdrive4.now.gg/play/sugar-game-network-limited/9030/magic-forest-dragon-quest","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Ancient Seal</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F10382%252Ficon%252Fancient-seal-the-exorcist.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive4.now.gg/play/lovo-entertainment-hong-kong-limited/10382/ancient-seal-the-exorcist","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Nexus</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252F8706%252Ficon%252Fnexus-nebula-echoes.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive4.now.gg/play/magic-game/8706/nexus-nebula-echoes","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Blue Archive</div><div class="content"><div class="image"><img src="https://res.ldrescdn.com/rms/ldplayer/process/img/482c8941475e40e399f365194ff87a5c1728455828.png?image_process=format,webp&x-oss-process=image%2Fresize%2Cw_384%2Fquality%2CQ_75" alt="App"></div><div class="button" onclick='window.open("https://www.easyfun.gg/cloud-games/blue-archive.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Genshin Inpact</div><div class="content"><div class="image"><img src="https://res.ldrescdn.com/rms/ldplayer/process/img/4dfe62cd7c3f4b2dafe7642693b652de1728456516.png?image_process=format,webp&x-oss-process=image%2Fresize%2Cw_384%2Fquality%2CQ_75" alt="App"></div><div class="button" onclick='window.open("https://www.easyfun.gg/cloud-games/genshin-impact.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Wuthering Waves</div><div class="content"><div class="image"><img src="https://res.ldrescdn.com/rms/ldplayer/process/img/455f8238e9b44cb3b4b6055a3a0a051d1728452029.png?image_process=format,webp&x-oss-process=image%2Fresize%2Cw_384%2Fquality%2CQ_75" alt="Genshin Impact"></div><div class="button" onclick='window.open("https://www.easyfun.gg/cloud-games/wuthering-waves.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header"> Pro Thử Nghiệm</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fdefault%252Fimages%252FIcon_512.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://turbolite.vercel.app/server/url?data=aHR0cHM6Ly91cHJveHkub25saW5lL3VsdHJhdmlvbGV0L2h2dHJzOCUyRi1obXN2ZWYtMS5sb3UuZWctYXJwcSUyRmVhbmF6eSUyRnBuYSU3Qi12ZWFobG9ub2V5JTJGbGtta3RnZC0xMjUzMi10amUlMkZ3Y2xpaWxnJTJGZGdhZi1xdXB2a3ZtcnEuanRvbA%3D%3D&fs=0&enc=0&v=c2VjdXJlX21vZGVfZW5hYmxlZA%3D%3D&t=1749952977577&h=MC5zaHN0eGZ3MDg2cQ%3D%3D","_blank")'>Vào </div></div></div><div class="screen"><div class="header">VPN App Launcher V3</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://testdrive-int2.now.gg/apps/uncube/7074/now.html","_blank")'>Vào </div></div></div><div class="screen"><div class="header">VPN App Launcher V2</div><div class="content"><div class="image"><img src="https://cdn.now.gg/assets-opt/_next/image?url=https%3A%2F%2Fcdn.now.gg%2Fassets-opt%2F_next%2Fimage%3Furl%3Dhttps%253A%252F%252Fcdn.now.gg%252Fapps-content%252Fcom.uncube.launcher3%252Ficon%252Fnow.png%26w%3D256%26q%3D80&w=1440&q=70" alt="App"></div><div class="button" onclick='window.open("https://now.gg/apps/uncube/10005/now.html","_blank")'>Vào </div></div></div><script>function showContent(){document.getElementById("loadingScreen").style.display="none",document.getElementById("mainContent").style.display="block"}function openNewTab(){window.open("https://youtube.com/@kaitomc276?si=bKfD58K1dTNHhPom","_blank")}</script><script>
+  const container = document.querySelector('.container');
+  const screens = document.querySelectorAll('
