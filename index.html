@@ -357,12 +357,12 @@
 
     <script>
         // --- CẤU HÌNH LIÊN KẾT TẠI ĐÂY ---
-        const GET_KEY_LINK = "https://link4sub.com/SOcC"; // Đổi đường link lấy key tại đây
+        const GET_KEY_LINK = "https://link4sub.com/Ifi0"; // Đổi đường link lấy key tại đây
         const MAIN_WEBSITE_LINK = "https://kaitomc276.github.io/M-y-o-kaitoMC276/"; // Đổi đường link trang web chính tại đây
         // --- KẾT THÚC CẤU HÌNH LIÊN KẾT ---
 
         // --- CẤU HÌNH KHÓA TRUY CẬP TẠI ĐÂY ---
-        const ACCESS_KEY = "Key-768";
+        const ACCESS_KEY = "Key-9876";
         // --- KẾT THÚC CẤU HÌNH KHÓA TRUY CẬP ---
 
 
@@ -471,11 +471,16 @@
             
             // Đây là phần kiểm tra key
             if (key === ACCESS_KEY) {
-                showNotification('Xác thực thành công! Đang dịch chuyển đến trang web chính...');
-                setTimeout(() => {
-                    window.location.href = MAIN_WEBSITE_LINK;
-                }, 2000);
-            } else {
+    // 🔹 Lưu key vào localStorage
+    localStorage.setItem("storedKey", key);
+    localStorage.setItem("keyTimestamp", Date.now().toString()); // lưu thời gian nhập
+
+    showNotification('Xác thực thành công! Đang dịch chuyển đến trang web chính...');
+    setTimeout(() => {
+        window.location.href = MAIN_WEBSITE_LINK;
+    }, 2000);
+}
+else {
                 showNotification('Khóa không hợp lệ. Vui lòng thử lại.', true);
             }
         });
@@ -499,6 +504,30 @@
                 mainContainer.style.transform = `rotateX(10deg) rotateY(-5deg)`;
             });
         }
+// 🔹 Kiểm tra key đã lưu khi load trang
+window.onload = () => {
+    const savedKey = localStorage.getItem("storedKey");
+    const savedTime = localStorage.getItem("keyTimestamp");
+
+    if (savedKey && savedTime) {
+        const now = Date.now();
+        const keyAge = now - parseInt(savedTime, 10);
+        const oneDay = 3 * 60 * 60 * 1000; // hạn 1 ngày
+
+        if (keyAge < oneDay && savedKey === ACCESS_KEY) {
+            // Nếu key còn hạn → tự động vào web chính
+            showNotification("Chào mừng trở lại! Tự động đăng nhập...");
+            setTimeout(() => {
+                window.location.href = MAIN_WEBSITE_LINK;
+            }, 2000);
+        } else {
+            // Nếu hết hạn thì xóa key cũ
+            localStorage.removeItem("storedKey");
+            localStorage.removeItem("keyTimestamp");
+        }
+    }
+};
+
     </script>
 </body>
-</html>
+    </html>
