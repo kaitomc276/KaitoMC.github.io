@@ -277,17 +277,28 @@
             .modal-content .key-link {
                 font-size: 1em; /* Tăng kích thước chữ cho ô link */
                 padding: 12px; /* Tăng padding cho ô link */
+
             }
         }
+
+.error-message {
+    color: #ff4d4d;       /* chữ đỏ */
+    font-size: 0.9em;     /* hơi nhỏ */
+    margin-top: 5px;      /* cách ô nhập một chút */
+    height: 18px;         /* giữ chỗ cố định để giao diện không bị nhảy */
+}
+
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1> 👨‍🔧Máy Ảo kaitoMC 🤳</h1>
-        <div class="input-group">
-            <input type="text" id="keyInput" placeholder="Dán key ...">
-        </div>
+       <div class="input-group">
+    <input type="text" id="keyInput" placeholder="Dán key ...">
+    <div id="errorMessage" class="error-message"></div> <!-- thêm dòng này -->
+</div>
+
         <button class="button get-key" id="getKeyBtn">Lấy Key</button>
         <button class="button submit" id="submitBtn">Xác nhận</button>
     </div>
@@ -341,17 +352,21 @@
 
         // Xử lý sự kiện khi nhấn nút "Xác nhận"
         submitBtn.addEventListener('click', () => {
-            const userKey = keyInput.value.trim();
-            if (userKey === LINKS.linkKey) {
-                showModal('successModal');
-                createConfetti();
-                setTimeout(() => {
-                    window.location.href = LINKS.linkWebChinh;
-                }, 3000); // Chuyển trang sau 3 giây
-            } else {
-                alert('Key không hợp lệ, vui lòng thử lại!');
-            }
-        });
+    const userKey = keyInput.value.trim();
+    const errorMessage = document.getElementById('errorMessage');
+
+    if (userKey === LINKS.linkKey) {
+        errorMessage.textContent = ""; // xóa thông báo lỗi nếu đúng
+        showModal('successModal');
+        createConfetti();
+        setTimeout(() => {
+            window.location.href = LINKS.linkWebChinh;
+        }, 3000);
+    } else {
+        errorMessage.textContent = "❌ Key sai, vui lòng thử lại!";
+    }
+});
+
 
         // Hàm hiển thị modal
         function showModal(modalId) {
@@ -378,4 +393,4 @@
     </script>
 
 </body>
-    </html>
+</html>
