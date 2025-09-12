@@ -24,6 +24,24 @@
             0% { transform: translateY(0) rotate(0); opacity: 1; }
             100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
         }
+/* 🔥 CSS cho popup cảnh báo mạng */
+.network-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffccd5; /* nền hồng đặc, không nhìn xuyên qua */
+  color: #b30021;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 40vh;
+  z-index: 2000;
+  animation: fadeIn 0.5s ease-in-out, shake 0.5s infinite alternate;
+}
+
 
         body {
             font-family: 'Roboto', sans-serif;
@@ -322,12 +340,49 @@
             <p>Bạn sẽ được chuyển đến trang chính sau giây lát...</p>
         </div>
     </div>
+<!-- 🔥 Popup cảnh báo mạng -->
+<div id="networkPopup" class="network-popup">
+  🚨 Mạng yếu hoặc mất kết nối! <br>Vui lòng kiểm tra lại.
+</div>
+<script>
+  const popup = document.getElementById("networkPopup");
+
+  // Khi mất mạng → hiện popup
+  window.addEventListener("offline", () => {
+    popup.style.display = "block";
+  });
+
+  // Khi có mạng lại → ẩn popup
+  window.addEventListener("online", () => {
+    popup.style.display = "none";
+  });
+
+  // Kiểm tra mạng chậm bằng cách ping ảnh nhỏ mỗi 15 giây
+  setInterval(() => {
+    const img = new Image();
+    const start = Date.now();
+    img.src = "https://www.google.com/favicon.ico?" + start;
+
+    img.onload = () => {
+      const ms = Date.now() - start;
+      if (ms > 3000) {
+        popup.style.display = "block";
+      } else {
+        popup.style.display = "none";
+      }
+    };
+
+    img.onerror = () => {
+      popup.style.display = "block";
+    };
+  }, 15000);
+</script>
 
     <script>
         // --- Thay đổi các link tại đây ---
         const LINKS = {
-            linkKey: "Key-600dangki", // Đây là key bạn muốn người dùng nhập
-            linkGet: "https://link4sub.com/3WXO", // Link trang web lấy key
+            linkKey: "Key-700dangki", // Đây là key bạn muốn người dùng nhập
+            linkGet: "https://link4sub.com/qXxN", // Link trang web lấy key
             linkWebChinh: "https://kaitomc276.github.io/M-y-o-kaitoMC276/" // Link trang web chính sau khi xác nhận
         };
         // ------------------------------------
@@ -393,4 +448,4 @@
     </script>
 
 </body>
-    </html>
+</html>
