@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<script>
+let time = localStorage.getItem("key_time");
+
+if (time && Date.now() - time < 24 * 60 * 60 * 1000) {
+    window.location.href = "index.html";
+}
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Key - Giao diện Anime Dễ Thương</title>
@@ -405,23 +412,20 @@
             copyToClipboard('getKeyLink');
         });
 
-        // Xử lý sự kiện khi nhấn nút "Xác nhận"
-        submitBtn.addEventListener('click', () => {
-    const userKey = keyInput.value.trim();
-    const errorMessage = document.getElementById('errorMessage');
+        
+submitBtn.addEventListener('click', () => {
+    let key = keyInput.value.trim();
 
-    if (userKey === LINKS.linkKey) {
-        errorMessage.textContent = ""; // xóa thông báo lỗi nếu đúng
-        showModal('successModal');
-        createConfetti();
-        setTimeout(() => {
-            window.location.href = LINKS.linkWebChinh;
-        }, 3000);
+    if (key === "Key-800") {        // 👈 KEY ĐÚNG
+        // 🔐 LƯU THỜI GIAN HIỆN TẠI
+        localStorage.setItem("key_time", Date.now());
+
+        // 👉 CHUYỂN SANG WEB CHÍNH
+        window.location.href = "index.html";
     } else {
-        errorMessage.textContent = "❌ Key sai, vui lòng thử lại!";
+        alert("❌ Key sai, nhập lại!");
     }
 });
-
 
         // Hàm hiển thị modal
         function showModal(modalId) {
