@@ -1,13 +1,7 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<script>
-let time = Number(localStorage.getItem("key_time"));
-
-if (time && Date.now() - time < 24 * 60 * 60 * 1000) {
-    window.location.href = "https://kaitomc276.github.io/M-y-o-kaitoMC276/";
-}
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Key - Giao diện Anime Dễ Thương</title>
@@ -412,20 +406,23 @@ if (time && Date.now() - time < 24 * 60 * 60 * 1000) {
             copyToClipboard('getKeyLink');
         });
 
-        
-submitBtn.addEventListener('click', () => {
-    let key = keyInput.value.trim();
+        // Xử lý sự kiện khi nhấn nút "Xác nhận"
+        submitBtn.addEventListener('click', () => {
+    const userKey = keyInput.value.trim();
+    const errorMessage = document.getElementById('errorMessage');
 
-    if (key === LINKS.linkKey) {        // 👈 KEY ĐÚNG
-        // 🔐 LƯU THỜI GIAN HIỆN TẠI
-        localStorage.setItem("key_time", Date.now());
-
-        // 👉 CHUYỂN SANG WEB CHÍNH
-        window.location.href = "https://kaitomc276.github.io/M-y-o-kaitoMC276/";
+    if (userKey === LINKS.linkKey) {
+        errorMessage.textContent = ""; // xóa thông báo lỗi nếu đúng
+        showModal('successModal');
+        createConfetti();
+        setTimeout(() => {
+            window.location.href = LINKS.linkWebChinh;
+        }, 3000);
     } else {
-        alert("❌ Key sai, nhập lại!");
+        errorMessage.textContent = "❌ Key sai, vui lòng thử lại!";
     }
 });
+
 
         // Hàm hiển thị modal
         function showModal(modalId) {
@@ -450,13 +447,6 @@ submitBtn.addEventListener('click', () => {
             }
         }
     </script>
-<script>
-function copyToClipboard(id) {
-    const text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text).then(() => {
-        alert("✅ Đã sao chép link lấy key!");
-    });
-}
-</script>
+
 </body>
 </html>
