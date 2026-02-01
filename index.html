@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
 <script>
-let time = localStorage.getItem("key_time");
+let time = Number(localStorage.getItem("key_time"));
 
 if (time && Date.now() - time < 24 * 60 * 60 * 1000) {
     window.location.href = "https://kaitomc276.github.io/M-y-o-kaitoMC276/";
@@ -416,7 +416,7 @@ if (time && Date.now() - time < 24 * 60 * 60 * 1000) {
 submitBtn.addEventListener('click', () => {
     let key = keyInput.value.trim();
 
-    if (key === "Key-800") {        // 👈 KEY ĐÚNG
+    if (key === LINKS.linkKey) {        // 👈 KEY ĐÚNG
         // 🔐 LƯU THỜI GIAN HIỆN TẠI
         localStorage.setItem("key_time", Date.now());
 
@@ -450,6 +450,13 @@ submitBtn.addEventListener('click', () => {
             }
         }
     </script>
-
+<script>
+function copyToClipboard(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("✅ Đã sao chép link lấy key!");
+    });
+}
+</script>
 </body>
 </html>
